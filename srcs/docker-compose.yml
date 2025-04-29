@@ -1,5 +1,6 @@
 name: inception
 
+
 services:
   nginx:
     image: nginx:inception
@@ -13,6 +14,7 @@ services:
     secrets:
       - ssl.crt
       - ssl.key
+    restart: on-failure
 
 #  WordPress:
 #    volumes:
@@ -20,18 +22,43 @@ services:
 #        source: ${HOME}/data/web
 #        target: /web
 #        read_only: true
-#  MariaDB:
-#    volumes:
-#      - type: bind
-#        source: ${HOME}/data/db
-#        target: /db
-#        read_only: false
-#
+  mariadb:
+    image: mariadb:inception
+    build:
+      context: ./requirements/mariadb
+      dockerfile: Dockerfile
+#############################################
+# ___DESCOMENTAR PARA PRUEBAS.___
+# En producción el entrypoint solo es nginx
+#    ports:
+#      - "3306:3306/tcp"
+#############################################
+    networks:
+      - inception
+    environment:
+      - MARIADB_ROOT_PASSWORD_FILE=/run/secrets/db_root_password
+      - MARIADB_DATABASE=${MARIADB_DATABASE}
+      - MARIADB_USER=${MARIADB_USER}
+      - MARIADB_PASSWORD_FILE=/run/secrets/db_password
+    secrets:
+      - db_root_password
+      - db_password
+    restart: on-failure
+    volumes:
+      - type: bind
+        source: ${HOME}/data/db
+        target: /usr/local/mysql/var
+        read_only: false
+
 networks:
   inception: {} 
 
 secrets:
   ssl.crt:
-    file: ./requirements/nginx/conf/ssl.crt
+    file: ../secrets/ssl.crt
   ssl.key:
-    file: ./requirements/nginx/conf/ssl.key
+    file: ../secrets/ssl.key
+  db_root_password:
+    file: ../secrets/db_root_password.txt
+  db_password:
+    file: ../secrets/db_password.txt

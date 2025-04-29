@@ -15,6 +15,5 @@ RUN apk add nginx
 ## Comando incial obligatorio, opcional
 #ENTRYPOINT [..., ..., ...]
 #ENTRYPOINT cmd param param
-CMD ["nginx","-g", "daemon off;"]
-#EXPOSE 80
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
 EXPOSE 443
