@@ -1,3 +1,4 @@
 #!/bin/sh
 
-rm ./secrets/ssl.{key,crt};
+rm -rf ./secrets/*;
+echo "/secrets cleaned";
