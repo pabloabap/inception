@@ -1,4 +1,4 @@
 #!/bin/sh
 
-rm -rf ./secrets/*;
-echo "/secrets cleaned";
+rm -rf ./secrets/ssl.*;
+echo "ssl credentianls cleaned";

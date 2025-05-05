@@ -14,7 +14,6 @@ clean:
 fclean: clean
 	@docker run --rm -v "${HOME}/data":"/to_delete:rw" mariadb:inception sh -c "rm -rf /to_delete/*" || true;
 	@cd srcs && docker compose down --rmi all --volumes || true;	
-	
 	@bash ./scripts/fclean.sh;
 
 re:

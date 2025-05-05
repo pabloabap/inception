@@ -17,11 +17,21 @@ services:
     restart: on-failure
 
 #  WordPress:
-#    volumes:
-#      - type: bind
-#        source: ${HOME}/data/web
-#        target: /web
-#        read_only: true
+#    image: wordpress:inception
+#    build:
+#      context: ./requirements/mariadb
+#      dockerfile: Dockerfile
+#   depends_on:
+#     - mariadb
+#     - nginx
+#   network:
+#     - inception
+#   volumes:
+#     - type: bind
+#       source: ${HOME}/data/web
+#       target: /web
+#       read_only: true
+    
   mariadb:
     image: mariadb:inception
     build:
