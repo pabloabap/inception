@@ -1,12 +1,13 @@
 name: inception
 
-
 services:
   nginx:
     image: nginx:inception
     build:
       context: ./requirements/nginx
       dockerfile: Dockerfile
+    depends_on:
+      - wordpress
     ports:
       - "443:443/tcp"
     networks:
@@ -14,24 +15,37 @@ services:
     secrets:
       - ssl.crt
       - ssl.key
+    volumes:
+      - type: bind
+        source: ${HOME}/data/web
+        target: /var/www/wp
+        read_only: true
     restart: on-failure
 
-#  WordPress:
-#    image: wordpress:inception
-#    build:
-#      context: ./requirements/mariadb
-#      dockerfile: Dockerfile
-#   depends_on:
-#     - mariadb
-#     - nginx
-#   network:
-#     - inception
-#   volumes:
-#     - type: bind
-#       source: ${HOME}/data/web
-#       target: /web
-#       read_only: true
-    
+  wordpress:
+    image: wordpress:inception
+    build:
+      context: ./requirements/wordpress
+      dockerfile: Dockerfile
+    depends_on:
+      - mariadb
+    networks:
+      - inception
+    volumes:
+      - type: bind
+        source: ${HOME}/data/web
+        target: /web
+#        read_only: true
+    environment:
+      - MARIADB_ROOT_PASSWORD_FILE=/run/secrets/db_root_password
+      - MARIADB_DATABASE=${MARIADB_DATABASE}
+      - MARIADB_USER=${MARIADB_USER}
+      - MARIADB_PASSWORD_FILE=/run/secrets/db_password
+    secrets:
+      - db_root_password
+      - db_password
+    restart: on-failure
+
   mariadb:
     image: mariadb:inception
     build:
