@@ -6,11 +6,10 @@ RUN apk add curl \
 
 FROM alpine:3.20 AS final
 COPY --from=wpget wp.zip /wp.zip
-RUN apk add php83-fpm php83-mysqli \
-	&& unzip -oq wp.zip
+COPY ./tools/wordpress_entrypoint.sh /wordpress_entrypoint.sh
+RUN apk add php83-fpm php83-mysqli && chmod 111 /wordpress_entrypoint.sh
 RUN sed --in-place 's/listen = 127.0.0.1:9000/listen = wordpress:9000/' \
 	/etc/php83/php-fpm.d/www.conf
-VOLUME ["/wordpress"]
 #FROM debian:11
 #FROM alpine:3.20 AS ...
 #WORKDIR ...
@@ -23,5 +22,5 @@ VOLUME ["/wordpress"]
 ## Comando incial obligatorio, opcional
 #ENTRYPOINT [..., ..., ...]
 #ENTRYPOINT cmd param param
-ENTRYPOINT ["php-fpm83", "-F"]
-#EXPOSE 443
+ENTRYPOINT ["/wordpress_entrypoint.sh"]
+EXPOSE 9000

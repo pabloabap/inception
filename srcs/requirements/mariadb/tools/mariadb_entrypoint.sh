@@ -1,7 +1,12 @@
 #!/bin/sh
 
-mariadb-install-db --user=mysql;
-trap "mariadb-admin shutdown -u root -p$(cat \"$MARIADB_ROOT_PASSWORD_FILE\")" \
+DATADIR="$(sed -n "/datadir/p" /etc/my.cnf.d/mariadb-server.cnf | \
+	cut  -d= -f2 | xargs)"
+
+if [ ! -d $DATADIR ] || [ -z "$(ls -A "$DATADIR")" ]; then
+	mariadb-install-db --user=mysql;
+fi
+trap "mariadb-admin shutdown -u root -p$(cat $MARIADB_ROOT_PASSWORD_FILE)" \
 	TERM;
 mariadbd-safe &
 PID=$!

@@ -12,17 +12,17 @@ if [ ! -d $SECRETS_DIR ]; then
 fi
 
 # Crear contraseñas y credenciales si lo estan definidos los ficheros
-if [ ! -f $DB_PASSWORD ]; then
+if [ ! -s $DB_PASSWORD ]; then
 	openssl rand -base64 12 > $DB_PASSWORD;
 	echo "Random db_password.txt generated in /secrets";
 fi
 
-if [ ! -f $DB_ROOT_PASSWORD ]; then
+if [ ! -s $DB_ROOT_PASSWORD ]; then
 	openssl rand -base64 12 > $DB_ROOT_PASSWORD;
 	echo "Random db_root_password.txt generated in /secrets";
 fi
 
-if [ ! -f $CREDENTIALS ]; then
-	touch $CREDENTIALS;
+if [ ! -s $CREDENTIALS ]; then
+	curl https://api.wordpress.org/secret-key/1.1/salt/ > $CREDENTIALS;
 	echo "credentials.txt file generated in /secrets";
 fi
