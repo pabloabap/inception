@@ -20,7 +20,7 @@ services:
         source: ${HOME}/data/web
         target: /var/www/wp
         read_only: true
-    restart: on-failure
+    restart: always
 
   wordpress:
     image: wordpress:inception
@@ -53,7 +53,7 @@ services:
       - db_password
       - wp_admin_password
       - wp_user_password
-    restart: on-failure
+    restart: always
 
   mariadb:
     image: mariadb:inception
@@ -81,7 +81,7 @@ services:
     secrets:
       - db_root_password
       - db_password
-    restart: on-failure
+    restart: always
     volumes:
       - type: bind
         source: ${HOME}/data/db
