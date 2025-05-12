@@ -16,10 +16,7 @@ services:
       - ssl.crt
       - ssl.key
     volumes:
-      - type: bind
-        source: ${HOME}/data/web
-        target: /var/www/wp
-        read_only: true
+      - web:/var/www/wp
     restart: always
 
   wordpress:
@@ -33,9 +30,7 @@ services:
     networks:
       - inception
     volumes:
-      - type: bind
-        source: ${HOME}/data/web
-        target: /web
+      - web:/web
     environment:
       - MARIADB_DATABASE=${MARIADB_DATABASE}
       - MARIADB_USER=${MARIADB_USER}
@@ -83,10 +78,7 @@ services:
       - db_password
     restart: always
     volumes:
-      - type: bind
-        source: ${HOME}/data/db
-        target: /usr/local/mysql/var
-        read_only: false
+      - db:/usr/local/mysql/var
 
 networks:
   inception: {} 
@@ -104,3 +96,17 @@ secrets:
     file: ../secrets/wp_admin_password.txt
   wp_user_password:
     file: ../secrets/wp_user_password.txt
+
+volumes:
+  db:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: "${HOME}/data/db"
+  web:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: "${HOME}/data/web"
