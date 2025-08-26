@@ -13,11 +13,11 @@ También puedes modificar parametros como los usuarios y los nombres de las base
 no funcione de manera nativa en Windows.
 
 ##  Despliegue
-En la carpeta principal del proyecto ejecutar `make`. Tras completarse la intalación podrás acceder a tu sitio web
+En la carpeta principal del proyecto ejecutar `make`. Tras completarse la instalación podrás acceder a tu sitio web
 desde cualquier navegador con la ruta `https://localhost:443` o sustituyendo localhost por el `$DOMAIN_NAME` indicado en [./srcs/.env](./srcs/.env) si también has configurado el host correctamente para que gestione dicha url.
 
 Si todo ha ido bien aparecerá una página alertando de que el sitio no es seguro dado que los certificados SSL, al haber sido
-autogenerados, no están avalador por ninguna entidad certificadora. Clica sobre Avanzar y acceder a la web.  Verás la web
+autogenerados, no están avalados por ninguna entidad certificadora. Clica sobre Avanzar y acceder a la web.  Verás la web
 por defect de WordPress.
 
 ## Configuración
